@@ -1,8 +1,8 @@
 # HRMAPSST 177-200
 ## GANG-LOCATION
  * Fetch the gang location details from the below query.
-    ```SQL
-    EXEC SQL                                       
+  ```SQL
+  EXEC SQL                                       
     SELECT DISTINCT                            
            GNG_GANG_HQ_CD                      
           ,GNG_FAX_ACD                         
@@ -23,5 +23,12 @@
        AND (GNG_TRM_DT      >= :RQT-DATE  
         OR GNG_TRM_DT       IS NULL)      
        AND GNG_DEL_TMSTP    IS NULL       
-   END-EXEC
-    ```
+END-EXEC                                  
+  ```
+## RECALL-LETTER
+ * Copy the Sub string of Request argument from 2nd character and length of 9 characters to employee id.
+ * Fetch the employee details from the employee master table. 
+ ```SQL
+ exe sql
+```
+
