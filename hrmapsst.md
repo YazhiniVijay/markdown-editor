@@ -406,4 +406,78 @@
        AND MEM_DEL_TMSTP IS NULL             
   END-EXEC             
   ```
-   
+  * If fax is equal to ‘HRPRTBMP’ and employee ssno is not equal to empty and value is equal to empty, then fetch the position assignment details from the below query.
+   ```SQL
+   EXEC SQL                                              
+   SELECT PAS_POS_NUMB                                
+         ,PAS_PAYROLL_NUMB                            
+         ,POS_SUPV_SSN                                
+     INTO :PAS-POS-NUMB                               
+         ,:PAS-PAYROLL-NUMB                           
+         ,:POS-SUPV-SSN                               
+     FROM CT.CEMPL_POS_ASGN A                         
+         ,CT.CNOP_POSITION                            
+    WHERE PAS_EMPL_SSNO     = :MEM-EMPL-SSNO          
+      AND PAS_DEL_TMSTP    IS NULL                    
+      AND PAS_ASGN_BGN_DT  <= :RQT-DATE               
+      AND (PAS_ASGN_TRM_DT >= :RQT-DATE               
+       OR PAS_ASGN_TRM_DT  IS NULL)                   
+      AND NOT EXISTS                                  
+          (SELECT 1 FROM CT.CEMPL_TRDY_ABS            
+            WHERE TDY_EMPL_SSNO     = A.PAS_EMPL_SSNO 
+              AND TDY_POS_NUMB      = A.PAS_POS_NUMB  
+              AND TDY_PAYROLL_NUMB  = A.PAS_PAYROLL_NUMB  
+              AND TDY_DEL_TMSTP    IS NULL                
+              AND TDY_EFF_DT       <= :RQT-DATE           
+              AND (TDY_TRM_DT      >= :RQT-DATE           
+               OR TDY_TRM_DT       IS NULL)               
+              AND TDY_RSN_CD        = 'PX')               
+      AND POS_POS_NUMB      = PAS_POS_NUMB                
+      AND POS_PAYROLL_NUMB  = PAS_PAYROLL_NUMB            
+      AND POS_POS_EFF_DT   <= :RQT-DATE                   
+      AND (POS_TRM_DT      >= :RQT-DATE                   
+       OR POS_TRM_DT       IS NULL)                       
+      AND POS_DEL_TMSTP    IS NULL                        
+  END-EXEC                         
+  ```
+ * If fax equal to 'ASGNLETT' or 'HRRECALL' or ‘'HRBUMPCN' and value equal to empty.
+   * Fetch the position and gang details from the below query
+  ```SQL
+  EXEC SQL                           
+     SELECT DISTINCT POS_POS_NUMB  
+           ,POS_POS_TITLE          
+           ,POS_POS_HQ_FLG         
+           ,POS_CITY_333           
+           ,POS_STATE              
+           ,POS_SUPV_SSN           
+           ,GNG_GANG_DESC          
+           ,GNG_FAX_ACD            
+           ,GNG_FAX_PFX            
+           ,GNG_FAX_NBR            
+           ,GNG_SUPV_RPTG_ID       
+       INTO :POS-POS-NUMB          
+           ,:POS-POS-TITLE         
+           ,:POS-POS-HQ-FLG        
+           ,:POS-CITY-333          
+           ,:POS-STATE             
+           ,:POS-SUPV-SSN          
+           ,:GNG-GANG-DESC                             
+           ,:GNG-FAX-ACD                               
+           ,:GNG-FAX-PFX                               
+           ,:GNG-FAX-NBR                               
+           ,:GNG-SUPV-RPTG-ID                          
+       FROM CT.CNOP_POSITION A                         
+           ,CT.CGANG B                                 
+      WHERE POS_POS_NUMB       = :POS-POS-NUMB         
+        AND POS_PAYROLL_NUMB   = :POS-PAYROLL-NUMB     
+        AND POS_POS_EFF_DT    <= :RQT-DATE             
+        AND (POS_TRM_DT       >= :RQT-DATE             
+         OR POS_TRM_DT        IS NULL)                 
+        AND POS_DEL_TMSTP     IS NULL                  
+        AND GNG_GANG_ID        = POS_SUPV_SSN          
+        AND GNG_GANG_EFF_DT   <= :RQT-DATE             
+        AND (GNG_TRM_DT       >= :RQT-DATE             
+         OR GNG_TRM_DT        IS NULL)                 
+        AND GNG_DEL_TMSTP     IS NULL                  
+  END-EXEC   
+  ```
