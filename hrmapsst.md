@@ -481,3 +481,62 @@
         AND GNG_DEL_TMSTP     IS NULL                  
   END-EXEC   
   ```
+   * When Record  or multiple records found in above query and gang fax number is not equal to empty then set gang fax acd, gang fax prefix and gang fax number.
+  
+ * Fetch the supervisor position details using below query.
+  ```SQL
+  EXEC SQL                                      
+   SELECT TSP_EXM_SUPV_POS_NBR_ID             
+        , PERSON_ID                           
+        , EMPL_FNME                           
+        , EMPL_MNME                           
+        , EMPL_LNME                           
+        , SUPV_PERSON_ID                      
+     INTO :TSP-EXM-SUPV-POS-NBR-ID            
+        , :KW-PERSON-ID                       
+        , :KW-EMPL-FNME                       
+        , :KW-EMPL-MNME                       
+        , :KW-EMPL-LNME                       
+        , :KW-SUPV-PERSON-ID                  
+     FROM CT.CGANG_TO_SUPV_POS                
+         ,KW.TEMPL                            
+    WHERE TSP_EFF_DT       <= :RQT-DATE       
+      AND (TSP_TRM_DT      >= :RQT-DATE       
+       OR TSP_TRM_DT       IS NULL)           
+      AND TSP_GANG_ID       = :POS-SUPV-SSN        
+      AND TSP_DEL_TS       IS NULL                 
+      AND TSP_EXM_SUPV_POS_TYP_CD  = 'PERM'        
+  
+      AND SUBSTR(EMPL_POS_NBR,1,3) = '000'         
+      AND SUBSTR(EMPL_POS_NBR,4,5) =               
+          SUBSTR(TSP_EXM_SUPV_POS_NBR_ID,4,5)      
+      AND EMPL_PERSID_ALT_CD  = 'N'                
+  END-EXEC            
+  ``` 
+ * When Record found in above query, then set the employee id.
+ 
+ * If fax equal to  'ASGNLETT' or  'HRRECALL' or  'HRBLABOL' or  'BULLCORR' or 'HRBUMPCN' and value1 is equal to empty.
+   * If fax is equal to 'ASGNLETT' or 'HRRECALL' or 'HRBUMPCN'  and position number is not equal to empty, then fetch the time reported details using below query.
+  ```SQL
+  EXEC SQL                                            
+    SELECT TMD_LINE_SEG                             
+          ,TMD_STRT_ENGR_MP                         
+          ,TMD_END_ENGR_MP                          
+          ,TMD_BILL_TO_CTR                          
+          ,CHAR(TMD_EFF_DT,USA)                     
+      INTO :BUMPC-LINE-SEG                          
+          ,:STRT-MP                                 
+          ,:END-MP                                  
+          ,:BUMPC-BILL-TO-CTR                       
+          ,:BUMPC-EFF-DT                            
+       FROM CT.CEMPL_TIME_RPTD A                    
+      WHERE TMD_GANG_ID       = :POS-SUPV-SSN       
+        AND TMD_POS_NUMB      = :POS-POS-NUMB       
+        AND TMD_PAYROLL_NUMB  = :POS-PAYROLL-NUMB   
+        AND TMD_BILL_TO_CTR  <> '99999'             
+        AND TMD_STRT_ENGR_MP <> 0.0                 
+        AND TMD_DEL_TMSTP IS NULL                   
+      FETCH FIRST 1 ROW ONLY       
+  END-EXEC                           
+  ```
+ 
