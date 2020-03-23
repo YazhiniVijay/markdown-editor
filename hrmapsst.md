@@ -189,7 +189,8 @@ END-EXEC
 ```
    * When Record  or multiple records found in above query, then set payroll number, position number, position title and state etc.
    
-* If position head quarter flag is equal to ‘1’ or ‘2’  and common point code is equal to ‘KM’ OR ‘KC’.
+   
+ * If position head quarter flag is equal to ‘1’ or ‘2’  and common point code is equal to ‘KM’ OR ‘KC’.
  ```SQL
  EXEC SQL                                             
     SELECT DISTINCT                                  
@@ -200,5 +201,39 @@ END-EXEC
       AND MAS_DEL_TMSTP      IS NULL                 
 END-EXEC
 ```
-
-   
+ * Fetch the assignment begin date and add timestamp from the below query.
+  ```SQL
+  EXEC SQL                                                   
+    SELECT DISTINCT                                        
+           CHAR(PAS_ASGN_BGN_DT, USA)                      
+          ,PAS_ADD_TMSTP                                   
+      INTO :PAS-ASGN-BGN-DT                                
+          ,:PAS-ADD-TMSTP                                  
+      FROM CT.CEMPL_POS_ASGN A                             
+     WHERE PAS_PAYROLL_NUMB   = :POS-PAYROLL-NUMB          
+       AND PAS_POS_NUMB       = :POS-POS-NUMB              
+       AND PAS_EMPL_SSNO      = :MEM-EMPL-SSNO             
+       AND PAS_SNRTY_DIST_NBR = :POS-SNRTY-DIST-NBR        
+       AND PAS_ASGN_CHG_CD   IN ('CC','CX')                
+       AND PAS_DEL_TMSTP     IS NULL                       
+       AND PAS_ASGN_BGN_DT    =                            
+           (SELECT MAX(PAS_ASGN_BGN_DT)                    
+              FROM CT.CEMPL_POS_ASGN B                     
+             WHERE PAS_PAYROLL_NUMB   = A.PAS_PAYROLL_NUMB 
+               AND PAS_POS_NUMB       = A.PAS_POS_NUMB     
+               AND PAS_EMPL_SSNO      = A.PAS_EMPL_SSNO      
+               AND PAS_SNRTY_DIST_NBR = A.PAS_SNRTY_DIST_NBR 
+               AND PAS_ASGN_CHG_CD   IN ('CC','CX')          
+               AND PAS_DEL_TMSTP     IS NULL)                
+END-EXEC
+```
+ * If mechanical id number is not equal to empty, then fetch the mechanical description from the below query.
+  ```SQL
+  EXEC SQL                                      
+    SELECT MMA_MCH_DESC                        
+      INTO :MMA-MCH-DESC                       
+      FROM CT.CMAPS_MACHINES                   
+     WHERE MMA_MCH_ID_NBR    = :MBP-MCH-ID-NBR 
+       AND MMA_DEL_TMSTP    IS NULL            
+ END-EXEC
+```
