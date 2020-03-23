@@ -187,5 +187,18 @@ END-EXEC
      AND GNG_DEL_TMSTP     IS NULL                
 END-EXEC 
 ```
-  * When Record  or multiple records found in above query, then set payroll number, position number, position title and state etc.
- * If position head quarter flag is equal to ‘1’ or ‘2’  and common point code is equal to ‘KM’ OR ‘KC’.
+   * When Record  or multiple records found in above query, then set payroll number, position number, position title and state etc.
+   
+* If position head quarter flag is equal to ‘1’ or ‘2’  and common point code is equal to ‘KM’ OR ‘KC’.
+ ```SQL
+ EXEC SQL                                             
+    SELECT DISTINCT                                  
+           MAS_FRMR_RD_CD                            
+      INTO :MAS-FRMR-RD-CD                           
+     FROM CT.CMAPS_SDIST_DESC                        
+    WHERE MAS_SNRTY_DIST_NBR  = :POS-SNRTY-DIST-NBR  
+      AND MAS_DEL_TMSTP      IS NULL                 
+END-EXEC
+```
+
+   
