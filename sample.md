@@ -75,3 +75,32 @@ END-EXEC
        AND MVC_DEL_TMSTP    IS NULL              
 END-EXEC                                         
  ```
+  * If timestamp is equal to empty, then fetch the details from the below query.
+  ```SQL
+  EXEC SQL                                        
+    SELECT DISTINCT                             
+           MVC_CALL_TMSTP                       
+          ,MVC_POS_NBR                          
+          ,MVC_SNRTY_DIST_NBR                   
+          ,MVC_ADD_USER_ID                      
+          ,MVC_VACY_TYP_CD                      
+          ,CHAR(MVC_RCALL_LTR_DT, USA)          
+      INTO :MVC-CALL-TMSTP                      
+          ,:MVC-POS-NBR                         
+          ,:MVC-SNRTY-DIST-NBR                  
+          ,:MVC-ADD-USER-ID                     
+          ,:MVC-VACY-TYP-CD                     
+          ,:MVC-RCALL-LTR-DT                    
+      FROM CT.CMAPS_VACY_CALLS A                
+     WHERE MVC_EMPL_SSNO      = :MEM-EMPL-SSNO  
+       AND MVC_POS_NBR        = :MVC-POS-NBR    
+       AND MVC_DEL_TMSTP    IS NULL             
+       AND MVC_CALL_TMSTP     =                      
+           (SELECT MAX(MVC_CALL_TMSTP)               
+              FROM CT.CMAPS_VACY_CALLS B             
+             WHERE MVC_EMPL_SSNO   = A.MVC_EMPL_SSNO 
+               AND MVC_POS_NBR     = A.MVC_POS_NBR   
+               AND MVC_DEL_TMSTP  IS NULL)           
+END-EXEC               
+```
+  
