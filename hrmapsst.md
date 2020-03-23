@@ -332,3 +332,19 @@
      WHERE MPL_USER_ID    = :MPL-USER-ID    
   END-EXEC     
   ```
+## FAX-POP-UP
+ * Copy the Sub string of Request argument from 2nd character and length of 1 character to value. 
+ * If value is equal to ‘R’, then fetch the report details from the below query.
+  ```SQL
+  EXEC SQL DECLARE RESEND2 CURSOR FOR            
+    SELECT MRE_RPT_DVC_ID                      
+          ,MRE_RPT_DVC_TYP_CD                  
+      FROM CT.CMAPS_REPORT_REQ                 
+     WHERE MRE_MAPS_RPT_ID = :MRE-MAPS-RPT-ID  
+     ORDER BY MRE_RPT_DVC_TYP_CD               
+             ,MRE_RPT_DVC_ID                   
+  END-EXEC.                                      
+  ```
+   * Based on the device type code set the report device id.
+   
+ * If value is not equal to ‘R’, then fetch the application code description from the below query
