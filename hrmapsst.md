@@ -187,7 +187,7 @@
      AND GNG_DEL_TMSTP     IS NULL                
    END-EXEC 
    ```
-   * When Record  or multiple records found in above query, then set payroll number, position number, position title and state etc.
+    * When Record  or multiple records found in above query, then set payroll number, position number, position title and state etc.
    
  * If position head quarter flag is equal to ‘1’ or ‘2’  and common point code is equal to ‘KM’ OR ‘KC’.
    ```SQL
@@ -571,4 +571,141 @@
        AND TMD_DEL_TMSTP IS NULL                   
      FETCH FIRST 1 ROW ONLY                        
    END-EXEC                                           
+   ```
+ * If record found in any case,
+   * Then fetch the position and gang details using below query.
+   ```SQL
+   EXEC SQL                           
+     SELECT DISTINCT POS_POS_NUMB  
+           ,POS_POS_TITLE          
+           ,POS_POS_HQ_FLG         
+           ,POS_CITY_333           
+           ,POS_STATE              
+           ,POS_SUPV_SSN           
+           ,GNG_GANG_DESC          
+           ,GNG_FAX_ACD            
+           ,GNG_FAX_PFX            
+           ,GNG_FAX_NBR            
+           ,GNG_SUPV_RPTG_ID       
+       INTO :POS-POS-NUMB          
+           ,:POS-POS-TITLE         
+           ,:POS-POS-HQ-FLG        
+           ,:POS-CITY-333          
+           ,:POS-STATE             
+           ,:POS-SUPV-SSN          
+           ,:GNG-GANG-DESC                             
+           ,:GNG-FAX-ACD                               
+           ,:GNG-FAX-PFX                               
+           ,:GNG-FAX-NBR                               
+           ,:GNG-SUPV-RPTG-ID                          
+       FROM CT.CNOP_POSITION A                         
+           ,CT.CGANG B                                 
+      WHERE POS_POS_NUMB       = :POS-POS-NUMB         
+        AND POS_PAYROLL_NUMB   = :POS-PAYROLL-NUMB     
+        AND POS_POS_EFF_DT    <= :RQT-DATE             
+        AND (POS_TRM_DT       >= :RQT-DATE             
+         OR POS_TRM_DT        IS NULL)                 
+        AND POS_DEL_TMSTP     IS NULL                  
+        AND GNG_GANG_ID        = POS_SUPV_SSN          
+        AND GNG_GANG_EFF_DT   <= :RQT-DATE             
+        AND (GNG_TRM_DT       >= :RQT-DATE             
+         OR GNG_TRM_DT        IS NULL)                 
+        AND GNG_DEL_TMSTP     IS NULL                  
+   END-EXEC 
+   ```
+ * When Record  or multiple records found in above query and supervisor RPTG id is not equal to empty.
+   * Fetch the supervisor details from the below query.
+   ```SQL
+   EXEC SQL                               
+    SELECT DISTINCT SUP_SUPV_RPTG_ID   
+          ,SUP_EMPL_SSNO               
+          ,SUP_SNRTY_DIST_NBR          
+          ,SUP_SUPV_TITLE              
+          ,SUP_ENGR_SUB_DEPT           
+          ,MPL_BN_EMPL_ID              
+          ,MPL_EMPL_LNME               
+          ,MPL_EMPL_FNME               
+          ,MPL_EMPL_MNME               
+          ,MPL_EMAIL_ID                
+      INTO :SUP-SUPV-RPTG-ID           
+          ,:SUP-EMPL-SSNO              
+          ,:SUP-SNRTY-DIST-NBR         
+          ,:SUP-SUPV-TITLE             
+          ,:SUP-ENGR-SUB-DEPT          
+          ,:MPL-BN-EMPL-ID             
+          ,:MPL-EMPL-LNME              
+          ,:MPL-EMPL-FNME                                
+          ,:MPL-EMPL-MNME                                
+          ,:MPL-EMAIL-ID                                 
+      FROM CT.CSUPERVISOR A                              
+          ,CT.CEMPLOYEE B                                
+      WHERE SUP_SUPV_RPTG_ID   = :SUP-SUPV-RPTG-ID       
+        AND MPL_EMPL_SSNO      = SUP_EMPL_SSNO           
+        AND SUP_DEL_TMSTP IS NULL                        
+        AND SUP_SNRTY_DIST_NBR =                         
+           (SELECT MIN(SUP_SNRTY_DIST_NBR)               
+              FROM CT.CSUPERVISOR                        
+             WHERE SUP_SUPV_RPTG_ID = A.SUP_SUPV_RPTG_ID 
+               AND SUP_EMPL_SSNO    = A.SUP_EMPL_SSNO)   
+   END-EXEC                                                 
+   ```
+ * Fetch the position and gang details using below query.
+   ```SQL
+   EXEC SQL                           
+     SELECT DISTINCT POS_POS_NUMB  
+           ,POS_POS_TITLE          
+           ,POS_POS_HQ_FLG         
+           ,POS_CITY_333           
+           ,POS_STATE              
+           ,POS_SUPV_SSN           
+           ,GNG_GANG_DESC          
+           ,GNG_FAX_ACD            
+           ,GNG_FAX_PFX            
+           ,GNG_FAX_NBR            
+           ,GNG_SUPV_RPTG_ID       
+       INTO :POS-POS-NUMB          
+           ,:POS-POS-TITLE         
+           ,:POS-POS-HQ-FLG        
+           ,:POS-CITY-333          
+           ,:POS-STATE             
+           ,:POS-SUPV-SSN          
+           ,:GNG-GANG-DESC                             
+           ,:GNG-FAX-ACD                               
+           ,:GNG-FAX-PFX                               
+           ,:GNG-FAX-NBR                               
+           ,:GNG-SUPV-RPTG-ID                          
+       FROM CT.CNOP_POSITION A                         
+           ,CT.CGANG B                                 
+      WHERE POS_POS_NUMB       = :POS-POS-NUMB         
+        AND POS_PAYROLL_NUMB   = :POS-PAYROLL-NUMB     
+        AND POS_POS_EFF_DT    <= :RQT-DATE             
+        AND (POS_TRM_DT       >= :RQT-DATE             
+         OR POS_TRM_DT        IS NULL)                 
+        AND POS_DEL_TMSTP     IS NULL                  
+        AND GNG_GANG_ID        = POS_SUPV_SSN          
+        AND GNG_GANG_EFF_DT   <= :RQT-DATE             
+        AND (GNG_TRM_DT       >= :RQT-DATE             
+         OR GNG_TRM_DT        IS NULL)                 
+        AND GNG_DEL_TMSTP     IS NULL                  
+   END-EXEC 
+   ```
+   * When Record  or multiple records found in above query, then fetch the supervisor email from the below query.
+   ```SQL
+   EXEC SQL                                    
+    SELECT EMPL_WRK_EML_ADDR                          
+      INTO :WS-EMPL-WRK-MAIL               
+      FROM CT.CMAPS_CODE_REF               
+      FROM CT.CGANG_TO_SUPV_POS            
+          ,KW.TEMPL     
+     WHERE TSP_GANG_ID         = :POS-SUPV-SSN   
+       AND TSP_EFF_DT         <= CURRENT DATE    
+       AND (TSP_TRM_DT        >= CURRENT DATE    
+         OR TSP_TRM_DT        IS NULL)           
+       AND  TSP_EXM_SUPV_POS_TYP_CD = 'PERM'     
+       AND SUBSTR(EMPL_POS_NBR,1,3) = '000'      
+       AND SUBSTR(EMPL_POS_NBR,4,5) =            
+           SUBSTR(TSP_EXM_SUPV_POS_NBR_ID,4,5)   
+       AND EMPL_PERSID_ALT_CD  = 'N'                      
+       AND TSP_DEL_TS      IS NULL               
+   END-EXEC   
    ```
