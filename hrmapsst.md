@@ -237,3 +237,28 @@ END-EXEC
        AND MMA_DEL_TMSTP    IS NULL            
  END-EXEC
 ```
+ * If gang supervisor rptg id is not equal to empty, then fetch the gang location details from the below query.
+  ```SQL
+  SELECT TMD_LINE_SEG                         
+          ,TMD_STRT_ENGR_MP                     
+          ,TMD_END_ENGR_MP                      
+          ,TMD_BILL_TO_CTR                      
+          ,CHAR(TMD_EFF_DT, USA)                
+      INTO :BUMPC-LINE-SEG                      
+          ,:STRT-MP                             
+          ,:END-MP                              
+          ,:BUMPC-BILL-TO-CTR                   
+          ,:BUMPC-EFF-DT                        
+      FROM CT.CEMPL_TIME_RPTD A                 
+     WHERE TMD_GANG_ID         = :GNG-GANG-ID   
+       AND TMD_POS_RLF_NBR    ¬= :HI-ONE        
+       AND TMD_PAY_DTL_ADJ    ¬= 'R'            
+       AND TMD_PAY_DTL_RVS    ¬= 'R'            
+       AND TMD_CASH_ADJ_PD_CD ¬= 'Y'            
+       AND TMD_DEL_TMSTP      IS NULL           
+       AND TMD_BILL_TO_CTR    ¬= '99999'             
+       AND TMD_STRT_ENGR_MP   ¬= 0.0                 
+       AND TMD_EFF_DT         >= :GNG-GANG-EFF-DT    
+     FETCH FIRST 1 ROW ONLY                          
+END-EXEC                                                                                
+```
