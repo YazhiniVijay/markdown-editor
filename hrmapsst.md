@@ -293,8 +293,42 @@
   END-EXEC
   ```
    * When Record found in above query, then set the employee id, employee last name, employee first name and employee middle name.
- * If employee last name is equal to empty and supervisor RPTG id is not equal to empty, then fetch the supervisor details from the below query.
- 
- * lin 1
-   * li 2
    
+ * If employee last name is equal to empty and supervisor RPTG id is not equal to empty, then fetch the supervisor details from the below query.
+  ```SQL
+  EXEC SQL                                                  
+    SELECT SUP_EMPL_SSNO                                  
+          ,MPL_EMPL_LNME                                  
+          ,MPL_EMPL_FNME                                  
+          ,MPL_EMPL_MNME                                  
+      INTO :SUP-EMPL-SSNO                                 
+          ,:MPL-EMPL-LNME                                 
+          ,:MPL-EMPL-FNME                                 
+          ,:MPL-EMPL-MNME                                 
+      FROM CT.CSUPERVISOR A                               
+          ,CT.CEMPLOYEE                                             
+     WHERE SUP_SUPV_RPTG_ID  = :TSP-EXM-SUPV-POS-NBR-ID   
+       AND SUP_DEL_TMSTP    IS NULL                       
+       AND MPL_EMPL_SSNO     = A.SUP_EMPL_SSNO            
+     FETCH FIRST 1 ROW ONLY                               
+  END-EXEC                                                  
+  ```
+ * Fetch the employee details from the employee table
+  ```SQL
+  EXEC SQL                                    
+    SELECT MPL_EMPL_SSNO                    
+          ,MPL_BN_EMPL_ID                   
+          ,MPL_EMPL_LNME                    
+          ,MPL_EMPL_FNME                    
+          ,MPL_EMPL_MNME                    
+          ,MPL_EMAIL_ID                     
+      INTO :MPL-EMPL-SSNO                   
+          ,:MPL-BN-EMPL-ID                  
+          ,:MPL-EMPL-LNME                   
+          ,:MPL-EMPL-FNME                   
+          ,:MPL-EMPL-MNME                   
+          ,:MPL-EMAIL-ID                    
+      FROM CT.CEMPLOYEE                     
+     WHERE MPL_USER_ID    = :MPL-USER-ID    
+  END-EXEC     
+  ```
