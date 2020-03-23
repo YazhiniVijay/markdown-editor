@@ -103,7 +103,7 @@ END-EXEC
                AND MVC_DEL_TMSTP  IS NULL)           
 END-EXEC               
 ```
- * Fetch the employee details from the below query.
+* Fetch the employee details from the below query.
  ```SQL
  EXEC SQL                                    
     SELECT MPL_EMPL_SSNO                    
@@ -122,7 +122,7 @@ END-EXEC
      WHERE MPL_EMPL_SSNO  = :MPL-EMPL-SSNO  
 END-EXEC                                    
 ```
- * Fetch the employee details from the below query.
+* Fetch the employee details from the below query.
  ```SQL
  EXEC SQL                                          
    SELECT DISTINCT                                
