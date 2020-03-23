@@ -188,7 +188,7 @@ END-EXEC
      AND GNG_DEL_TMSTP     IS NULL                
 END-EXEC                                           
 ```
-  * When Record  or multiple records found in above query, then set payroll number, position number, position title and state etc.
+   * When Record of multiple records found in above query, then set payroll number, position number, position title and state etc.
  * If position head quarter flag is equal to ‘1’ or ‘2’  and common point code is equal to ‘KM’ OR ‘KC’.
  ```SQL
  EXEC SQL                                             
