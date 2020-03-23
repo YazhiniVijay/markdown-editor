@@ -26,4 +26,31 @@
        AND GNG_DEL_TMSTP    IS NULL       
 END-EXEC                                  
  ```
-  
+ ## RECALL-LETTER
+  * Copy the Sub string of Request argument from 2nd character and length of 9 characters to employee id. 
+  * Fetch the employee details from the employee master table.
+  ```SQL
+  EXEC SQL                     
+    SELECT MEM_EMPL_SSNO     
+          ,MEM_EMPL_ADDR1    
+          ,MEM_CITY_NME      
+          ,MEM_STATE         
+          ,MEM_ZIP           
+          ,MEM_EMPL_LNME     
+          ,MEM_EMPL_FNME     
+          ,MEM_EMPL_MINIT    
+          ,MEM_EMPL_ID       
+      INTO :MEM-EMPL-SSNO    
+          ,:MEM-EMPL-ADDR1   
+          ,:MEM-CITY-NME     
+          ,:MEM-STATE        
+          ,:MEM-ZIP          
+          ,:MEM-EMPL-LNME    
+          ,:MEM-EMPL-FNME    
+          ,:MEM-EMPL-MINIT   
+          ,:MEM-EMPL-ID                      
+      FROM CT.CMAPS_EMPL_MASTER              
+     WHERE MEM_EMPL_ID    = :MEM-EMPL-ID     
+       AND MEM_DEL_TMSTP IS NULL             
+END-EXEC          
+  ```
