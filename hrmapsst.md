@@ -1,8 +1,8 @@
 # HRMAPSST 177-200
 ## GANG-LOCATION
  * Fetch the gang location details from the below query.
-  ```SQL
-  EXEC SQL                                       
+   ```SQL
+   EXEC SQL                                       
     SELECT DISTINCT                            
            GNG_GANG_HQ_CD                      
           ,GNG_FAX_ACD                         
@@ -23,13 +23,13 @@
        AND (GNG_TRM_DT      >= :RQT-DATE  
         OR GNG_TRM_DT       IS NULL)      
        AND GNG_DEL_TMSTP    IS NULL       
-  END-EXEC                                  
-  ```
+   END-EXEC                                  
+   ```
 ## RECALL-LETTER
  * Copy the Sub string of Request argument from 2nd character and length of 9 characters to employee id.
  * Fetch the employee details from the employee master table
-  ```SQL
-  EXEC SQL                     
+   ```SQL
+   EXEC SQL                     
     SELECT MEM_EMPL_SSNO     
           ,MEM_EMPL_ADDR1    
           ,MEM_CITY_NME      
@@ -51,12 +51,12 @@
       FROM CT.CMAPS_EMPL_MASTER              
      WHERE MEM_EMPL_ID    = :MEM-EMPL-ID     
        AND MEM_DEL_TMSTP IS NULL             
-  END-EXEC                                     
-  ```
+   END-EXEC                                     
+   ```
  * Copy the Sub string of Request argument from 11th character and length of 26 characters to timestamp.
  * If timestamp is not equal to empty, then fetch the details from the below query.
-  ```SQL
-  EXEC SQL                                         
+   ```SQL
+   EXEC SQL                                         
     SELECT DISTINCT                              
            MVC_CALL_TMSTP                        
           ,MVC_POS_NBR                           
@@ -72,11 +72,11 @@
      WHERE MVC_EMPL_SSNO      = :MEM-EMPL-SSNO   
        AND MVC_CALL_TMSTP     = :MVC-CALL-TMSTP  
        AND MVC_DEL_TMSTP    IS NULL              
-  END-EXEC
-  ```
+   END-EXEC
+   ```
  * If timestamp is equal to empty, then fetch the details from the below query.
-  ```SQL
-  EXEC SQL                                        
+   ```SQL
+   EXEC SQL                                        
     SELECT DISTINCT                             
            MVC_CALL_TMSTP                       
           ,MVC_POS_NBR                          
@@ -100,11 +100,11 @@
              WHERE MVC_EMPL_SSNO   = A.MVC_EMPL_SSNO 
                AND MVC_POS_NBR     = A.MVC_POS_NBR   
                AND MVC_DEL_TMSTP  IS NULL)           
-  END-EXEC
-  ```
+   END-EXEC
+   ```
  * Fetch the employee details from the below query.
-  ```SQL
-  EXEC SQL                                    
+   ```SQL
+   EXEC SQL                                    
     SELECT MPL_EMPL_SSNO                    
           ,MPL_BN_EMPL_ID                   
           ,MPL_EMPL_LNME                    
@@ -119,11 +119,11 @@
           ,:MPL-EMPL-GENDER                 
       FROM CT.CEMPLOYEE                     
      WHERE MPL_EMPL_SSNO  = :MPL-EMPL-SSNO  
-  END-EXEC
-  ```
+   END-EXEC
+   ```
  * Fetch the employee details from the below query
-  ```SQL
-  EXEC SQL                                          
+   ```SQL
+   EXEC SQL                                          
    SELECT DISTINCT                                
           POS_PAYROLL_NUMB                        
          ,POS_POS_NUMB                            
@@ -185,24 +185,24 @@
      AND (GNG_TRM_DT       >= POS_POS_EFF_DT      
       OR GNG_TRM_DT        IS NULL)               
      AND GNG_DEL_TMSTP     IS NULL                
-  END-EXEC 
-  ```
+   END-EXEC 
+   ```
    * When Record  or multiple records found in above query, then set payroll number, position number, position title and state etc.
    
  * If position head quarter flag is equal to ‘1’ or ‘2’  and common point code is equal to ‘KM’ OR ‘KC’.
-  ```SQL
-  EXEC SQL                                             
+   ```SQL
+   EXEC SQL                                             
     SELECT DISTINCT                                  
            MAS_FRMR_RD_CD                            
       INTO :MAS-FRMR-RD-CD                           
      FROM CT.CMAPS_SDIST_DESC                        
     WHERE MAS_SNRTY_DIST_NBR  = :POS-SNRTY-DIST-NBR  
       AND MAS_DEL_TMSTP      IS NULL                 
-  END-EXEC
-  ```
+   END-EXEC
+   ```
  * Fetch the assignment begin date and add timestamp from the below query.
-  ```SQL
-  EXEC SQL                                                   
+   ```SQL
+   EXEC SQL                                                   
     SELECT DISTINCT                                        
            CHAR(PAS_ASGN_BGN_DT, USA)                      
           ,PAS_ADD_TMSTP                                   
@@ -224,21 +224,21 @@
                AND PAS_SNRTY_DIST_NBR = A.PAS_SNRTY_DIST_NBR 
                AND PAS_ASGN_CHG_CD   IN ('CC','CX')          
                AND PAS_DEL_TMSTP     IS NULL)                
-  END-EXEC
-  ```
+   END-EXEC
+   ```
  * If mechanical id number is not equal to empty, then fetch the mechanical description from the below query.
-  ```SQL
-  EXEC SQL                                      
+   ```SQL
+   EXEC SQL                                      
     SELECT MMA_MCH_DESC                        
       INTO :MMA-MCH-DESC                       
       FROM CT.CMAPS_MACHINES                   
      WHERE MMA_MCH_ID_NBR    = :MBP-MCH-ID-NBR 
        AND MMA_DEL_TMSTP    IS NULL            
-  END-EXEC
-  ```
+   END-EXEC
+   ```
  * If gang supervisor rptg id is not equal to empty, then fetch the gang location details from the below query.
-  ```SQL
-  EXEC SQL                                        
+   ```SQL
+   EXEC SQL                                        
     SELECT TMD_LINE_SEG                         
           ,TMD_STRT_ENGR_MP                     
           ,TMD_END_ENGR_MP                      
@@ -260,11 +260,11 @@
        AND TMD_STRT_ENGR_MP   ¬= 0.0                 
        AND TMD_EFF_DT         >= :GNG-GANG-EFF-DT    
      FETCH FIRST 1 ROW ONLY                          
-  END-EXEC                                                                                
-  ```
+   END-EXEC                                                                                
+   ```
  * Fetch the supervisor position details using below query.
-  ```SQL
-  EXEC SQL                                      
+   ```SQL
+   EXEC SQL                                      
    SELECT TSP_EXM_SUPV_POS_NBR_ID             
         , PERSON_ID                           
         , EMPL_FNME                           
@@ -290,13 +290,13 @@
       AND SUBSTR(EMPL_POS_NBR,4,5) =               
           SUBSTR(TSP_EXM_SUPV_POS_NBR_ID,4,5)      
       AND EMPL_PERSID_ALT_CD  = 'N'                
-  END-EXEC
-  ```
+   END-EXEC
+   ```
    * When Record found in above query, then set the employee id, employee last name, employee first name and employee middle name.
    
  * If employee last name is equal to empty and supervisor RPTG id is not equal to empty, then fetch the supervisor details from the below query.
-  ```SQL
-  EXEC SQL                                                  
+   ```SQL
+   EXEC SQL                                                  
     SELECT SUP_EMPL_SSNO                                  
           ,MPL_EMPL_LNME                                  
           ,MPL_EMPL_FNME                                  
@@ -311,11 +311,11 @@
        AND SUP_DEL_TMSTP    IS NULL                       
        AND MPL_EMPL_SSNO     = A.SUP_EMPL_SSNO            
      FETCH FIRST 1 ROW ONLY                               
-  END-EXEC                                                  
-  ```
+   END-EXEC                                                  
+   ```
  * Fetch the employee details from the employee table
-  ```SQL
-  EXEC SQL                                    
+   ```SQL
+   EXEC SQL                                    
     SELECT MPL_EMPL_SSNO                    
           ,MPL_BN_EMPL_ID                   
           ,MPL_EMPL_LNME                    
@@ -330,37 +330,37 @@
           ,:MPL-EMAIL-ID                    
       FROM CT.CEMPLOYEE                     
      WHERE MPL_USER_ID    = :MPL-USER-ID    
-  END-EXEC     
-  ```
+   END-EXEC     
+   ```
 ## FAX-POP-UP
  * Copy the Sub string of Request argument from 2nd character and length of 1 character to value. 
  * If value is equal to ‘R’, then fetch the report details from the below query.
-  ```SQL
-  EXEC SQL DECLARE RESEND2 CURSOR FOR            
+   ```SQL
+   EXEC SQL DECLARE RESEND2 CURSOR FOR            
     SELECT MRE_RPT_DVC_ID                      
           ,MRE_RPT_DVC_TYP_CD                  
       FROM CT.CMAPS_REPORT_REQ                 
      WHERE MRE_MAPS_RPT_ID = :MRE-MAPS-RPT-ID  
      ORDER BY MRE_RPT_DVC_TYP_CD               
              ,MRE_RPT_DVC_ID                   
-  END-EXEC.                                      
-  ```
+   END-EXEC.                                      
+   ```
    * Based on the device type code set the report device id.
    
  * If value is not equal to ‘R’, then fetch the application code description from the below query
-  ```SQL
-  EXEC SQL                                                  
+   ```SQL
+   EXEC SQL                                                  
     SELECT ECD_APPL_CD_DESC                               
       INTO :ECD-APPL-CD-DESC                              
       FROM CM.CEMPL_CODES                                 
      WHERE ECD_APPL_CD                   = 'MAPSP'        
        AND SUBSTR(ECD_APPL_CD_DESC,1,8)  = :WS-PRINTER    
        AND ECD_DEL_USER_TMSTP           IS NULL           
-  END-EXEC                                                  
-  ```
+   END-EXEC                                                  
+   ```
  * Fetch the employee details from the employee table.
-  ```SQL
-  EXEC SQL                                    
+   ```SQL
+   EXEC SQL                                    
     SELECT MPL_EMPL_SSNO                    
           ,MPL_BN_EMPL_ID                   
           ,MPL_EMPL_LNME                    
@@ -375,14 +375,14 @@
           ,:MPL-EMAIL-ID                    
       FROM CT.CEMPLOYEE                     
      WHERE MPL_USER_ID    = :MPL-USER-ID    
-  END-EXEC                                    
-  ```
+   END-EXEC                                    
+   ```
    * When employee id is not equal to empty, then set the employee id.
    
  * If fax is equal to ‘HRPRTBMP’.
    * Copy the Sub string of Request argument from 11th character and length of 7 character to employee id, then fetch the employee details from the employee master table.
-  ```SQL
-  EXEC SQL                     
+   ```SQL
+   EXEC SQL                     
     SELECT MEM_EMPL_SSNO     
           ,MEM_EMPL_ADDR1    
           ,MEM_CITY_NME      
@@ -404,12 +404,12 @@
       FROM CT.CMAPS_EMPL_MASTER              
      WHERE MEM_EMPL_ID    = :MEM-EMPL-ID     
        AND MEM_DEL_TMSTP IS NULL             
-  END-EXEC             
-  ```
+   END-EXEC             
+   ```
   * If fax is equal to ‘HRPRTBMP’ and employee ssno is not equal to empty and value is equal to empty, then fetch the position assignment details from the below query.
-   ```SQL
-   EXEC SQL                                              
-   SELECT PAS_POS_NUMB                                
+    ```SQL
+    EXEC SQL                                              
+    SELECT PAS_POS_NUMB                                
          ,PAS_PAYROLL_NUMB                            
          ,POS_SUPV_SSN                                
      INTO :PAS-POS-NUMB                               
@@ -438,12 +438,12 @@
       AND (POS_TRM_DT      >= :RQT-DATE                   
        OR POS_TRM_DT       IS NULL)                       
       AND POS_DEL_TMSTP    IS NULL                        
-  END-EXEC                         
-  ```
+    END-EXEC                         
+    ```
  * If fax equal to 'ASGNLETT' or 'HRRECALL' or ‘'HRBUMPCN' and value equal to empty.
    * Fetch the position and gang details from the below query
-  ```SQL
-  EXEC SQL                           
+   ```SQL
+   EXEC SQL                           
      SELECT DISTINCT POS_POS_NUMB  
            ,POS_POS_TITLE          
            ,POS_POS_HQ_FLG         
@@ -479,13 +479,13 @@
         AND (GNG_TRM_DT       >= :RQT-DATE             
          OR GNG_TRM_DT        IS NULL)                 
         AND GNG_DEL_TMSTP     IS NULL                  
-  END-EXEC   
-  ```
+   END-EXEC   
+   ```
    * When Record  or multiple records found in above query and gang fax number is not equal to empty then set gang fax acd, gang fax prefix and gang fax number.
   
  * Fetch the supervisor position details using below query.
-  ```SQL
-  EXEC SQL                                      
+   ```SQL
+   EXEC SQL                                      
    SELECT TSP_EXM_SUPV_POS_NBR_ID             
         , PERSON_ID                           
         , EMPL_FNME                           
@@ -511,14 +511,14 @@
       AND SUBSTR(EMPL_POS_NBR,4,5) =               
           SUBSTR(TSP_EXM_SUPV_POS_NBR_ID,4,5)      
       AND EMPL_PERSID_ALT_CD  = 'N'                
-  END-EXEC            
-  ``` 
+   END-EXEC            
+   ``` 
  * When Record found in above query, then set the employee id.
  
  * If fax equal to  'ASGNLETT' or  'HRRECALL' or  'HRBLABOL' or  'BULLCORR' or 'HRBUMPCN' and value1 is equal to empty.
    * If fax is equal to 'ASGNLETT' or 'HRRECALL' or 'HRBUMPCN'  and position number is not equal to empty, then fetch the time reported details using below query.
-  ```SQL
-  EXEC SQL                                            
+   ```SQL
+   EXEC SQL                                            
     SELECT TMD_LINE_SEG                             
           ,TMD_STRT_ENGR_MP                         
           ,TMD_END_ENGR_MP                          
@@ -537,6 +537,38 @@
         AND TMD_STRT_ENGR_MP <> 0.0                 
         AND TMD_DEL_TMSTP IS NULL                   
       FETCH FIRST 1 ROW ONLY       
-  END-EXEC                           
-  ```
- 
+   END-EXEC                           
+   ```
+ * If fax is not equal to 'ASGNLETT' or 'HRRECALL' or 'HRBUMPCN', then fetch the time reported details using below query.
+   ```SQL
+   EXEC SQL                                      
+    SELECT TMD_LINE_SEG                       
+          ,TMD_STRT_ENGR_MP                   
+          ,TMD_END_ENGR_MP                    
+          ,TMD_BILL_TO_CTR                    
+          ,CHAR(TMD_EFF_DT,USA)               
+          ,POS_POS_NUMB                       
+          ,POS_PAYROLL_NUMB                   
+      INTO :BUMPC-LINE-SEG                    
+          ,:STRT-MP                           
+          ,:END-MP                            
+          ,:BUMPC-BILL-TO-CTR                 
+          ,:BUMPC-EFF-DT                      
+          ,:POS-POS-NUMB                      
+          ,:POS-PAYROLL-NUMB                  
+       FROM CT.CEMPL_TIME_RPTD A              
+           ,CT.CNOP_POSITION B                
+     WHERE POS_SUPV_SSN      = :POS-SUPV-SSN  
+       AND POS_POS_EFF_DT    <= CURRENT DATE       
+       AND (POS_TRM_DT       >= CURRENT DATE       
+        OR POS_TRM_DT        IS NULL)              
+       AND POS_DEL_TMSTP     IS NULL               
+       AND TMD_GANG_ID       = POS_SUPV_SSN        
+       AND TMD_POS_NUMB      = POS_POS_NUMB        
+       AND TMD_PAYROLL_NUMB  = POS_PAYROLL_NUMB    
+       AND TMD_BILL_TO_CTR  <> '99999'             
+       AND TMD_STRT_ENGR_MP <> 0.0                 
+       AND TMD_DEL_TMSTP IS NULL                   
+     FETCH FIRST 1 ROW ONLY                        
+   END-EXEC                                           
+   ```
