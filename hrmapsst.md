@@ -53,4 +53,25 @@ END-EXEC
        AND MEM_DEL_TMSTP IS NULL             
 END-EXEC 
 ```
+ * Copy the Sub string of Request argument from 11th character and length of 26 characters to timestamp.
+ * If timestamp is not equal to empty, then fetch the details from the below query.
+  ```SQL
+  EXEC SQL                                         
+    SELECT DISTINCT                              
+           MVC_CALL_TMSTP                        
+          ,MVC_POS_NBR                           
+          ,MVC_SNRTY_DIST_NBR                    
+          ,MVC_ADD_USER_ID                       
+          ,MVC_VACY_TYP_CD                       
+      INTO :MVC-CALL-TMSTP                       
+          ,:MVC-POS-NBR                          
+          ,:MVC-SNRTY-DIST-NBR                   
+          ,:MVC-ADD-USER-ID                      
+          ,:MVC-VACY-TYP-CD                      
+      FROM CT.CMAPS_VACY_CALLS                   
+     WHERE MVC_EMPL_SSNO      = :MEM-EMPL-SSNO   
+       AND MVC_CALL_TMSTP     = :MVC-CALL-TMSTP  
+       AND MVC_DEL_TMSTP    IS NULL              
+END-EXEC
+```
 
