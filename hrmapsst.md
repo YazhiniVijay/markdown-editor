@@ -348,3 +348,32 @@
    * Based on the device type code set the report device id.
    
  * If value is not equal to ‘R’, then fetch the application code description from the below query
+  ```SQL
+  EXEC SQL                                                  
+    SELECT ECD_APPL_CD_DESC                               
+      INTO :ECD-APPL-CD-DESC                              
+      FROM CM.CEMPL_CODES                                 
+     WHERE ECD_APPL_CD                   = 'MAPSP'        
+       AND SUBSTR(ECD_APPL_CD_DESC,1,8)  = :WS-PRINTER    
+       AND ECD_DEL_USER_TMSTP           IS NULL           
+  END-EXEC                                                  
+  ```
+ * Fetch the employee details from the employee table.
+  ```SQL
+  EXEC SQL                                    
+    SELECT MPL_EMPL_SSNO                    
+          ,MPL_BN_EMPL_ID                   
+          ,MPL_EMPL_LNME                    
+          ,MPL_EMPL_FNME                    
+          ,MPL_EMPL_MNME                    
+          ,MPL_EMAIL_ID                     
+      INTO :MPL-EMPL-SSNO                   
+          ,:MPL-BN-EMPL-ID                  
+          ,:MPL-EMPL-LNME                   
+          ,:MPL-EMPL-FNME                   
+          ,:MPL-EMPL-MNME                   
+          ,:MPL-EMAIL-ID                    
+      FROM CT.CEMPLOYEE                     
+     WHERE MPL_USER_ID    = :MPL-USER-ID    
+  END-EXEC                                    
+  ```
